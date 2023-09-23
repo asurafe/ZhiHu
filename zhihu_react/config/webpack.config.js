@@ -1,5 +1,3 @@
-"use strict";
-
 const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
@@ -69,9 +67,10 @@ const swSrc = paths.swSrc;
 // style files regexes
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
-const lessRegex = /\.(less)$/;
-const lessModuleRegex = /\.module\.(less)$/;
-
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
+// 导入自动格式化rem插件
+const px2rem = require("postcss-pxtorem");
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === "true") {
     return false;
@@ -147,6 +146,10 @@ module.exports = function (webpackEnv) {
                   // so that it honors browserslist config in package.json
                   // which in turn let's users customize the target behavior as per their needs.
                   "postcss-normalize",
+                  px2rem({
+                    rootValue: 75, // 基于lib-flexible，750设计稿就会设置1rem=750px，此时在webpack编译的时候我们需要让px2rem插件按照1rem=75px转换
+                    propList: ["*"], // 对所有文件中的样式都生效
+                  }),
                 ]
               : [
                   "tailwindcss",
@@ -160,6 +163,10 @@ module.exports = function (webpackEnv) {
                       stage: 3,
                     },
                   ],
+                  px2rem({
+                    rootValue: 75, // 基于lib-flexible，750设计稿就会设置1rem=750px，此时在webpack编译的时候我们需要让px2rem插件按照1rem=75px转换
+                    propList: ["*"], // 对所有文件中的样式都生效
+                  }),
                 ],
           },
           sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
@@ -311,7 +318,8 @@ module.exports = function (webpackEnv) {
         .map((ext) => `.${ext}`)
         .filter((ext) => useTypeScript || !ext.includes("ts")),
       alias: {
-        "@": path.appSrc,
+        // 别名
+        "@": paths.appSrc,
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         "react-native": "react-native-web",
@@ -418,6 +426,10 @@ module.exports = function (webpackEnv) {
                     require.resolve("babel-preset-react-app"),
                     {
                       runtime: hasJsxRuntime ? "automatic" : "classic",
+                      targets: {
+                        chrome: 49,
+                        ios: 10,
+                      },
                     },
                   ],
                 ],

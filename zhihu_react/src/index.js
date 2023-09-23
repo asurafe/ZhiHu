@@ -1,17 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.less";
+import "lib-flexible";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// 处理页面最大宽度
+(function () {
+  const handleMax = function handleMax() {
+    let html = document.documentElement,
+      root = document.getElementById("root"),
+      size = parseFloat(html.style.fontSize);
+    root.style.maxWidth = "750px";
+    if (size >= 75) {
+      html.style.fontSize = "75px";
+    }
+  };
+  handleMax();
+  window.addEventListener("resize", handleMax);
+})();
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <>
+    <div className="box">珠峰培训</div>
+  </>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
