@@ -1,5 +1,4 @@
 import { lazy } from "react";
-// 默认展示首页 打包到js中
 import Home from "../views/Home";
 
 const routes = [
