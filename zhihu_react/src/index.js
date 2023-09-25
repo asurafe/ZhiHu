@@ -1,5 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import App from "./App";
+
+import { ConfigProvider } from "antd-mobile";
+import zhCN from "antd-mobile/es/locales/zh-CN";
+
 import "./index.less";
 import "lib-flexible";
 
@@ -20,7 +25,7 @@ import "lib-flexible";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <>
-    <div className="box">珠峰培训</div>
-  </>
+  <ConfigProvider locale={zhCN}>
+    <App />
+  </ConfigProvider>
 );
